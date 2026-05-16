@@ -1,0 +1,8 @@
+{
+  "name": "TaskMaster",
+  "description": "Premium productivity app landing page for tracking tasks and workflow.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
