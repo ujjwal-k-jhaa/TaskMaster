@@ -51,6 +51,55 @@ const STAGGER_CONTAINER = {
   },
 };
 
+function FeatureCard({ feature }: { feature: any }) {
+  const [showUseCase, setShowUseCase] = useState(false);
+  return (
+    <div className="group cursor-default relative flex flex-col h-full bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-white/20 transition-colors">
+      {/* Tooltip */}
+      <div className="absolute -top-12 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20">
+        <div className="bg-white text-tm-bg text-xs font-semibold px-3 py-2 rounded-lg shadow-xl whitespace-nowrap">
+          {feature.tooltip}
+          <div className="absolute -bottom-1 left-4 w-2 h-2 bg-white rotate-45" />
+        </div>
+      </div>
+
+      <div className="flex justify-between items-start mb-4">
+        <div className="w-12 h-12 rounded-xl glass flex items-center justify-center border border-white/10 group-hover:bg-white/5 transition-colors">
+          <div className="text-tm-secondary group-hover:text-tm-accent transition-colors">
+            {feature.icon}
+          </div>
+        </div>
+        <ArrowUpRight className="w-5 h-5 text-tm-secondary opacity-0 -translate-x-2 translate-y-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all text-tm-accent" />
+      </div>
+      <h3 className="text-xl font-display font-semibold mb-2 group-hover:text-white transition-colors">{feature.title}</h3>
+      <p className="text-tm-secondary text-sm leading-relaxed mb-4">{feature.desc}</p>
+      
+      <div className="mt-auto pt-2 border-t border-white/5">
+        <button 
+          onClick={() => setShowUseCase(!showUseCase)}
+          className="text-xs font-medium text-tm-secondary hover:text-white flex items-center gap-1 transition-colors group/btn mb-2"
+        >
+          {showUseCase ? 'Hide Use Case' : 'View Use Case'} 
+          <ChevronDown className={`w-3 h-3 transition-transform ${showUseCase ? 'rotate-180' : 'group-hover/btn:translate-y-0.5'}`} />
+        </button>
+        
+        <AnimatePresence>
+          {showUseCase && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <p className="text-xs font-mono text-tm-accent uppercase tracking-wider bg-tm-accent/10 p-3 rounded-lg border border-tm-accent/10 mt-1">{feature.useCase}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -317,26 +366,14 @@ export default function App() {
 
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8">
                {[
-                 { title: "Keyboard Centric", desc: "Command palette for everything. Execute actions, navigate views, and manage states entirely via keystrokes to maintain your flow state.", useCase: "Perfect for: Keeping your hands on the keyboard to log tasks instantly.", icon: <Command className="w-5 h-5" /> },
-                 { title: "Smart Scheduling", desc: "Calendar integration with AI-powered timeblock suggestions. TaskMaster learns your energy patterns to suggest the best times for deep work.", useCase: "Perfect for: Carving out focused time amidst a chaotic meeting schedule.", icon: <Calendar className="w-5 h-5" /> },
-                 { title: "Deep Work Modes", desc: "Block digital distractions and track true uninterrupted focus time. Automatically mutes system notifications and plays ambient sounds.", useCase: "Perfect for: Writers and creatives who need long blocks of concentration.", icon: <Zap className="w-5 h-5" /> },
-                 { title: "End-to-End Encryption", desc: "Your tasks are yours. Zero-knowledge architecture ensures that not even our team can read your personal plans or sensitive work notes.", useCase: "Perfect for: Executives, legal teams, and privacy-conscious users.", icon: <Shield className="w-5 h-5" /> },
-                 { title: "Real-time Collaboration", desc: "Instant sync with your team on shared projects. Multiplayer task management where updates and comments appear instantly without reloading.", useCase: "Perfect for: Remote and hybrid teams needing a single source of truth.", icon: <Users className="w-5 h-5" /> },
-                 { title: "Advanced Analytics", desc: "Visualize your productivity trends over time. Identify bottlenecks in your week, see exactly where your focus hours went, and measure velocity.", useCase: "Perfect for: Anyone looking to audit their time and optimize their routines.", icon: <TrendingUp className="w-5 h-5" /> }
+                 { title: "Keyboard Centric", tooltip: "Global shortcut Cmd+K", desc: "Command palette for everything. Execute actions, navigate views, and manage states entirely via keystrokes to maintain your flow state.", useCase: "Perfect for: Keeping your hands on the keyboard to log tasks instantly.", icon: <Command className="w-5 h-5" /> },
+                 { title: "Smart Scheduling", tooltip: "AI drag-and-drop calendar", desc: "Calendar integration with AI-powered timeblock suggestions. TaskMaster learns your energy patterns to suggest the best times for deep work.", useCase: "Perfect for: Carving out focused time amidst a chaotic meeting schedule.", icon: <Calendar className="w-5 h-5" /> },
+                 { title: "Deep Work Modes", tooltip: "Block distracting apps", desc: "Block digital distractions and track true uninterrupted focus time. Automatically mutes system notifications and plays ambient sounds.", useCase: "Perfect for: Writers and creatives who need long blocks of concentration.", icon: <Zap className="w-5 h-5" /> },
+                 { title: "End-to-End Encryption", tooltip: "AES-256 local encryption", desc: "Your tasks are yours. Zero-knowledge architecture ensures that not even our team can read your personal plans or sensitive work notes.", useCase: "Perfect for: Executives, legal teams, and privacy-conscious users.", icon: <Shield className="w-5 h-5" /> },
+                 { title: "Real-time Collaboration", tooltip: "Multiplayer cursors & chat", desc: "Instant sync with your team on shared projects. Multiplayer task management where updates and comments appear instantly without reloading.", useCase: "Perfect for: Remote and hybrid teams needing a single source of truth.", icon: <Users className="w-5 h-5" /> },
+                 { title: "Advanced Analytics", tooltip: "Exportable weekly reports", desc: "Visualize your productivity trends over time. Identify bottlenecks in your week, see exactly where your focus hours went, and measure velocity.", useCase: "Perfect for: Anyone looking to audit their time and optimize their routines.", icon: <TrendingUp className="w-5 h-5" /> }
                ].map((feature, i) => (
-                 <div key={i} className="group cursor-pointer">
-                   <div className="flex justify-between items-start mb-4">
-                     <div className="w-12 h-12 rounded-xl glass flex items-center justify-center border border-white/10 group-hover:bg-white/5 transition-colors">
-                       <div className="text-tm-secondary group-hover:text-tm-accent transition-colors">
-                         {feature.icon}
-                       </div>
-                     </div>
-                     <ArrowUpRight className="w-5 h-5 text-tm-secondary opacity-0 -translate-x-2 translate-y-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all text-tm-accent" />
-                   </div>
-                   <h3 className="text-xl font-display font-semibold mb-2 group-hover:text-white transition-colors">{feature.title}</h3>
-                   <p className="text-tm-secondary text-sm leading-relaxed mb-4">{feature.desc}</p>
-                   <p className="text-xs font-mono text-tm-accent uppercase tracking-wider bg-tm-accent/10 p-3 rounded-lg border border-tm-accent/10">{feature.useCase}</p>
-                 </div>
+                 <FeatureCard key={i} feature={feature} />
                ))}
              </div>
 
